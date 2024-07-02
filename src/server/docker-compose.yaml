@@ -1,0 +1,61 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    ports:
+      - "8080:8080" # In production, only this port can be accessed from outside
+    environment:
+      - API_HOST="backend"
+      - API_PORT="8081"
+    depends_on:
+      - backend
+    networks:
+      - little_farmer
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    command: ["python3", "./backend/startup.py"]
+    ports:
+      - "8081:8081"
+    environment:
+      - DEFAULT_ADMIN_USER="admin"
+      - DEFAULT_ADMIN_PASSWORD="admin" # Change this in production
+      - API_HOST="0.0.0.0"
+      - API_PORT="8081"
+      - REDIS_HOST="db"
+      - REDIS_PORT="6379"
+    depends_on:
+      - db
+    networks:
+      - little_farmer
+
+  ollama: # for AI
+      image: ollama/ollama:latest
+      ports:
+        - "11434:11434"
+      networks:
+        - little_farmer
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                capabilities: [gpu]
+      volumes:
+        - ./ollama:/root/.ollama:rw
+
+  db:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - little_farmer
+
+networks:
+  little_farmer:
+    driver: bridge
