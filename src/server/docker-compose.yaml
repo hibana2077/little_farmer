@@ -24,9 +24,9 @@ services:
       - DEFAULT_ADMIN_USER="admin"
       - DEFAULT_ADMIN_PASSWORD="admin" # Change this in production
       - API_HOST="0.0.0.0"
-      - API_PORT="8081"
       - REDIS_HOST="db"
       - REDIS_PORT="6379"
+      - OLLAMA_SERVER="http://ollama:11434"
     depends_on:
       - db
     networks:
