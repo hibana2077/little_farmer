@@ -1,17 +1,4 @@
 services:
-  web:
-    build:
-      context: .
-      dockerfile: ./web/Dockerfile
-    ports:
-      - "8080:8080" # In production, only this port can be accessed from outside
-    environment:
-      - API_HOST="backend"
-      - API_PORT="8081"
-    depends_on:
-      - backend
-    networks:
-      - little_farmer
 
   backend:
     build:

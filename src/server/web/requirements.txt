@@ -1,5 +1,0 @@
-streamlit
-requests
-translators
-langchain_community
-langchain
