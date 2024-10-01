@@ -1,15 +1,23 @@
+# Langchain
 from langchain_community.vectorstores.faiss import FAISS
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.embeddings import OllamaEmbeddings
-from contextlib import asynccontextmanager
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import JSONResponse
+
+# Standard Library
 import os
 import time
+
+# FastAPI
 import uvicorn
 import requests
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+
+# Database
+import redis
+
 
 ollama_server = os.getenv("OLLAMA_SERVER", "http://localhost:11434")
 HOST = os.getenv("API_HOST", "127.0.0.1")
