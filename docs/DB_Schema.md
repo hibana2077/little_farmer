@@ -3,6 +3,7 @@
 ## MongoDB 集合
 
 ### 用戶集合 (users)
+
 ```json
 {
   "_id": ObjectId,
@@ -16,6 +17,7 @@
 ```
 
 ### 水耕系統集合 (hydroponic_systems)
+
 ```json
 {
   "_id": ObjectId,
@@ -43,6 +45,7 @@
 ```
 
 ### 感應器數據集合 (sensor_data)
+
 ```json
 {
   "_id": ObjectId,
@@ -61,6 +64,7 @@
 ```
 
 ### 圖像集合 (images)
+
 ```json
 {
   "_id": ObjectId,
@@ -71,6 +75,7 @@
 ```
 
 ### AI 對話歷史集合 (ai_chat_history)
+
 ```json
 {
   "_id": ObjectId,
@@ -86,6 +91,7 @@
 ```
 
 ### 課程集合 (courses)
+
 ```json
 {
   "_id": ObjectId,
@@ -119,6 +125,7 @@
 ```
 
 ### 作業集合 (assignments)
+
 ```json
 {
   "_id": ObjectId,
@@ -140,6 +147,7 @@
 ```
 
 ### 論壇集合 (forum)
+
 ```json
 {
   "_id": ObjectId,
@@ -159,6 +167,7 @@
 ```
 
 ### 系統日誌集合 (system_logs)
+
 ```json
 {
   "_id": ObjectId,
