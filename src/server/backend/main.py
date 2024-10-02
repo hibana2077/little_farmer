@@ -17,6 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Database
 import redis
+import pymongo
 
 
 ollama_server = os.getenv("OLLAMA_SERVER", "http://localhost:11434")
