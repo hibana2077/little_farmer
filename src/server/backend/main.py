@@ -19,11 +19,12 @@ from fastapi.middleware.cors import CORSMiddleware
 import redis
 import pymongo
 
-
+# Ollama
 ollama_server = os.getenv("OLLAMA_SERVER", "http://localhost:11434")
 HOST = os.getenv("API_HOST", "127.0.0.1")
 embeddings = OllamaEmbeddings(base_url=ollama_server)
 
+# FassAPI
 app = FastAPI()
 
 app.add_middleware(
