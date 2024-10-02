@@ -24,6 +24,16 @@ ollama_server = os.getenv("OLLAMA_SERVER", "http://localhost:11434")
 HOST = os.getenv("API_HOST", "127.0.0.1")
 embeddings = OllamaEmbeddings(base_url=ollama_server)
 
+# Database initialization
+
+## Redis
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+redis_client = redis.Redis.from_url(REDIS_URL)
+
+## MongoDB
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/")
+mongo_client = pymongo.MongoClient(MONGO_URL)
+
 # FassAPI
 app = FastAPI()
 
