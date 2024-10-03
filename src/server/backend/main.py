@@ -37,6 +37,10 @@ mongo_client = pymongo.MongoClient(MONGO_URL)
 # FassAPI
 app = FastAPI()
 
+## Route mounting
+from auth import router as auth_router
+app.include_router(auth_router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
