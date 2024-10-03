@@ -19,3 +19,5 @@ fastapi
 
 redis
 pymongo
+
+python-jose[cryptography]
