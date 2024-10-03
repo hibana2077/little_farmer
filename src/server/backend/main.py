@@ -68,18 +68,5 @@ def read_root():
     """
     return {"Hello": "World"}
 
-@app.post("/auth/login")
-def login(data: dict):
-    """
-    A function that handles the login endpoint.
-
-    Args:
-        data (dict): A dictionary with the keys "username" and "password".
-
-    Returns:
-        dict: A dictionary with the message "Login Successful".
-    """
-    return {"message": "Login Successful"}
-
 if __name__ == "__main__":
     uvicorn.run(app, host=HOST, port=8081) # In docker need to change to 0.0.0.0
