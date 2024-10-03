@@ -15,6 +15,10 @@ Base URL: `https://api.hydroponic-edu.com/v1`
 - POST `/users`
 - DELETE `/users/{id}`
 
+## 用戶綁定水耕系統
+
+- POST `/users/bind-system`
+
 ## 水耕系統監控
 
 - GET `/system/status`

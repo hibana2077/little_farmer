@@ -33,6 +33,9 @@ class UserResponse(BaseModel):
     createdAt: datetime
     updatedAt: datetime
 
+class SystemBinding(BaseModel):
+    systemId: str
+
 # MongoDB helper functions
 def get_user_collection():
     return mongo_client.get_database("hydroponic_edu").users
@@ -57,6 +60,42 @@ async def get_current_admin_user(current_user: AuthUser = Depends(get_current_us
     return current_user
 
 # Endpoints
+
+@router.post("/users/bind-system", response_model=dict)
+async def bind_user_to_system(
+    binding: SystemBinding,
+    current_user: AuthUser = Depends(get_current_user)
+):
+    user_systems_collection = mongo_client.get_database("hydroponic_edu").user_systems
+    hydroponic_systems_collection = mongo_client.get_database("hydroponic_edu").hydroponic_systems
+
+    # Check if the system exists
+    system = hydroponic_systems_collection.find_one({"_id": ObjectId(binding.systemId)})
+    if not system:
+        raise HTTPException(status_code=404, detail="Hydroponic system not found")
+
+    # Check if the user is already bound to this system
+    existing_binding = user_systems_collection.find_one({
+        "userId": ObjectId(current_user.id),
+        "systemId": ObjectId(binding.systemId)
+    })
+    if existing_binding:
+        raise HTTPException(status_code=400, detail="User is already bound to this system")
+
+    # Create new binding
+    new_binding = {
+        "userId": ObjectId(current_user.id),
+        "systemId": ObjectId(binding.systemId),
+        "createdAt": datetime.utcnow(),
+        "updatedAt": datetime.utcnow()
+    }
+    result = user_systems_collection.insert_one(new_binding)
+
+    if result.inserted_id:
+        return {"message": "User successfully bound to the hydroponic system"}
+    else:
+        raise HTTPException(status_code=500, detail="Failed to bind user to the system")
+
 @router.post("/users", response_model=UserResponse)
 async def create_user(user: UserCreate, current_admin: AuthUser = Depends(get_current_admin_user)):
     user_collection = get_user_collection()

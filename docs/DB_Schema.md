@@ -16,6 +16,18 @@
 }
 ```
 
+  ### 用戶綁定水耕系統集合 (user_systems)
+
+  ```json
+  {
+    "_id": ObjectId,
+    "userId": ObjectId,  // 參考 users
+    "systemId": ObjectId,  // 參考 hydroponic_systems
+    "createdAt": Date,
+    "updatedAt": Date
+  }
+  ```
+
 ### 水耕系統集合 (hydroponic_systems)
 
 ```json
