@@ -1,22 +1,28 @@
-from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi.security import OAuth2PasswordBearer
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from bson import ObjectId
 from typing import Optional
 import bcrypt
-from main import mongo_client
+from jose import JWTError, jwt
+
+from main import mongo_client, redis_client
+from auth import SECRET_KEY, ALGORITHM, get_current_user, User as AuthUser
+
 router = APIRouter()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 # Pydantic models
 class UserCreate(BaseModel):
     username: str
     password: str
-    email: str
-    role: str
+    email: EmailStr
+    role: str = "student"
 
 class UserUpdate(BaseModel):
     username: Optional[str] = None
-    email: Optional[str] = None
+    email: Optional[EmailStr] = None
     role: Optional[str] = None
 
 class UserResponse(BaseModel):
@@ -29,7 +35,7 @@ class UserResponse(BaseModel):
 
 # MongoDB helper functions
 def get_user_collection():
-    return mongo_client.get_database("your_database_name").users
+    return mongo_client.get_database("hydroponic_edu").users
 
 def user_helper(user) -> dict:
     return {
@@ -41,9 +47,18 @@ def user_helper(user) -> dict:
         "updatedAt": user["updatedAt"]
     }
 
+# Custom dependencies
+async def get_current_admin_user(current_user: AuthUser = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only admin users can perform this action"
+        )
+    return current_user
+
 # Endpoints
 @router.post("/users", response_model=UserResponse)
-async def create_user(user: UserCreate):
+async def create_user(user: UserCreate, current_admin: AuthUser = Depends(get_current_admin_user)):
     user_collection = get_user_collection()
     
     # Check if username or email already exists
@@ -67,21 +82,28 @@ async def create_user(user: UserCreate):
     return user_helper(created_user)
 
 @router.get("/users/{id}", response_model=UserResponse)
-async def get_user(id: str):
+async def get_user(id: str, current_user: AuthUser = Depends(get_current_user)):
     user_collection = get_user_collection()
     user = user_collection.find_one({"_id": ObjectId(id)})
     if user:
-        return user_helper(user)
+        # Only allow users to view their own profile or admins to view any profile
+        if str(user["_id"]) == current_user.id or current_user.role == "admin":
+            return user_helper(user)
+        raise HTTPException(status_code=403, detail="Not authorized to view this user")
     raise HTTPException(status_code=404, detail="User not found")
 
 @router.put("/users/{id}", response_model=UserResponse)
-async def update_user(id: str, user_update: UserUpdate):
+async def update_user(id: str, user_update: UserUpdate, current_user: AuthUser = Depends(get_current_user)):
     user_collection = get_user_collection()
     
     # Check if user exists
     existing_user = user_collection.find_one({"_id": ObjectId(id)})
     if not existing_user:
         raise HTTPException(status_code=404, detail="User not found")
+    
+    # Only allow users to update their own profile or admins to update any profile
+    if str(existing_user["_id"]) != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized to update this user")
     
     # Prepare update data
     update_data = {k: v for k, v in user_update.dict().items() if v is not None}
@@ -94,10 +116,19 @@ async def update_user(id: str, user_update: UserUpdate):
     return user_helper(updated_user)
 
 @router.delete("/users/{id}", response_model=dict)
-async def delete_user(id: str):
+async def delete_user(id: str, current_admin: AuthUser = Depends(get_current_admin_user)):
     user_collection = get_user_collection()
     delete_result = user_collection.delete_one({"_id": ObjectId(id)})
     
     if delete_result.deleted_count == 1:
         return {"message": "User successfully deleted"}
+    raise HTTPException(status_code=404, detail="User not found")
+
+# New endpoint to get current user's profile
+@router.get("/users/me", response_model=UserResponse)
+async def get_current_user_profile(current_user: AuthUser = Depends(get_current_user)):
+    user_collection = get_user_collection()
+    user = user_collection.find_one({"_id": ObjectId(current_user.id)})
+    if user:
+        return user_helper(user)
     raise HTTPException(status_code=404, detail="User not found")
