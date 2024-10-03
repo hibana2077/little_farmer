@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from jose import JWTError, jwt
@@ -90,52 +90,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     if user is None:
         raise credentials_exception
     return user
-
-class UserCreate(BaseModel):
-    username: str
-    email: EmailStr
-    password: str
-    role: str = "student"  # Default role is student
-
-@router.post("/auth/register", response_model=User)
-async def register(user: UserCreate):
-    # Check if the username already exists
-    if mongo_client.hydroponic_edu.users.find_one({"username": user.username}):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already registered"
-        )
-    
-    # Check if the email already exists
-    if mongo_client.hydroponic_edu.users.find_one({"email": user.email}):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
-        )
-    
-    # Hash the password
-    hashed_password = get_password_hash(user.password)
-    
-    # Prepare user data for insertion
-    user_data = user.dict()
-    user_data["password"] = hashed_password
-    user_data["createdAt"] = datetime.utcnow()
-    user_data["updatedAt"] = datetime.utcnow()
-    
-    # Insert the new user into the database
-    result = mongo_client.hydroponic_edu.users.insert_one(user_data)
-    
-    # Check if the insertion was successful
-    if not result.inserted_id:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to create user"
-        )
-    
-    # Return the created user (excluding the password)
-    created_user = user_data.copy()
-    created_user.pop("password")
-    return User(**created_user)
 
 @router.post("/auth/login", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
