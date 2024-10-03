@@ -39,7 +39,10 @@ app = FastAPI()
 
 ## Route mounting
 from auth import router as auth_router
+from user_management import router as user_management_router
+
 app.include_router(auth_router)
+app.include_router(user_management_router)
 
 app.add_middleware(
     CORSMiddleware,
