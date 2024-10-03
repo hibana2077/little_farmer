@@ -146,6 +146,3 @@ async def refresh_token(refresh_token: str):
         return {"access_token": access_token, "refresh_token": new_refresh_token, "token_type": "bearer"}
     except JWTError:
         raise HTTPException(status_code=400, detail="Invalid refresh token")
-
-# Include the router in your main FastAPI app
-app.include_router(router)
