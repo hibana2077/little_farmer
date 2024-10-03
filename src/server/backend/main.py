@@ -27,8 +27,9 @@ embeddings = OllamaEmbeddings(base_url=ollama_server)
 # Database initialization
 
 ## Redis
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-redis_client = redis.Redis.from_url(REDIS_URL)
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+redis_client_token = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
 ## MongoDB
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/")

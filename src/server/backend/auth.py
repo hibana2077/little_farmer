@@ -8,7 +8,7 @@ import os
 from bson import ObjectId
 
 # Assuming these are already initialized in your main.py
-from main import app, mongo_client, redis_client
+from main import app, mongo_client, redis_client_token
 
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
 ALGORITHM = "HS256"
@@ -107,7 +107,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     refresh_token = create_refresh_token(data={"sub": user.username})
     
     # Store refresh token in Redis
-    redis_client.setex(f"refresh_token:{user.username}", 
+    redis_client_token.setex(f"refresh_token:{user.username}", 
                        timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS), 
                        refresh_token)
     
@@ -116,7 +116,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 @router.post("/auth/logout")
 async def logout(current_user: User = Depends(get_current_user)):
     # Delete refresh token from Redis
-    redis_client.delete(f"refresh_token:{current_user.username}")
+    redis_client_token.delete(f"refresh_token:{current_user.username}")
     return {"message": "Successfully logged out"}
 
 @router.post("/auth/refresh-token", response_model=Token)
@@ -128,7 +128,7 @@ async def refresh_token(refresh_token: str):
             raise HTTPException(status_code=400, detail="Invalid refresh token")
         
         # Check if refresh token exists in Redis
-        stored_token = redis_client.get(f"refresh_token:{username}")
+        stored_token = redis_client_token.get(f"refresh_token:{username}")
         if not stored_token or stored_token.decode() != refresh_token:
             raise HTTPException(status_code=400, detail="Invalid or expired refresh token")
         
@@ -139,7 +139,7 @@ async def refresh_token(refresh_token: str):
         new_refresh_token = create_refresh_token(data={"sub": username})
         
         # Update refresh token in Redis
-        redis_client.setex(f"refresh_token:{username}", 
+        redis_client_token.setex(f"refresh_token:{username}", 
                            timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS), 
                            new_refresh_token)
         

@@ -11,11 +11,12 @@ services:
       - DEFAULT_ADMIN_USER="admin"
       - DEFAULT_ADMIN_PASSWORD="admin" # Change this in production
       - API_HOST="0.0.0.0"
-      - REDIS_HOST="db"
+      - REDIS_HOST="redis"
       - REDIS_PORT="6379"
       - OLLAMA_SERVER="http://ollama:11434"
     depends_on:
-      - db
+      - redis
+      - mongo
     networks:
       - little_farmer
 
@@ -35,12 +36,21 @@ services:
       volumes:
         - ./ollama:/root/.ollama:rw
 
-  db:
+  redis:
     image: redis:latest
     ports:
       - "6379:6379"
     volumes:
       - redis-data:/data
+    networks:
+      - little_farmer
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
     networks:
       - little_farmer
 
