@@ -1,9 +1,7 @@
 hydroponic-edu-platform/
 ├── app/
 │   ├── (auth)/
-│   │   ├── login/
-│   │   │   └── page.tsx
-│   │   └── logout/
+│   │   └── login/
 │   │       └── page.tsx
 │   ├── dashboard/
 │   │   ├── layout.tsx
@@ -62,6 +60,14 @@ hydroponic-edu-platform/
 ├── lib/
 │   ├── api.ts
 │   └── auth.ts
+├── redux/
+│   ├── store.ts
+│   ├── rootReducer.ts
+│   ├── hooks.ts
+│   └── slices/
+│       ├── authSlice.ts
+│       ├── systemSlice.ts
+│       └── aiAssistantSlice.ts
 ├── styles/
 │   └── globals.css
 ├── public/
