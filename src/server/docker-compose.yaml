@@ -1,5 +1,14 @@
 services:
 
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - taiwan_arrivals_network
+
   backend:
     build:
       context: .
