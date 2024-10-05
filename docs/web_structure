@@ -1,0 +1,73 @@
+hydroponic-edu-platform/
+├── app/
+│   ├── (auth)/
+│   │   ├── login/
+│   │   │   └── page.tsx
+│   │   └── logout/
+│   │       └── page.tsx
+│   ├── dashboard/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── my-system/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── monitoring/
+│   │   │   └── page.tsx
+│   │   └── control/
+│   │       └── page.tsx
+│   ├── ai-assistant/
+│   │   └── page.tsx
+│   ├── learning-center/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── courses/
+│   │   │   ├── [id]/
+│   │   │   │   └── page.tsx
+│   │   │   └── page.tsx
+│   │   └── quizzes/
+│   │       ├── [id]/
+│   │       │   └── page.tsx
+│   │       └── page.tsx
+│   ├── data-analysis/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── assignments/
+│   │   ├── [id]/
+│   │   │   └── page.tsx
+│   │   └── page.tsx
+│   ├── community/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── help/
+│   │   └── page.tsx
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── layout/
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   └── Sidebar.tsx
+│   ├── dashboard/
+│   │   ├── SystemStatus.tsx
+│   │   └── PlantGrowthChart.tsx
+│   ├── my-system/
+│   │   ├── SensorReadings.tsx
+│   │   └── CameraFeed.tsx
+│   ├── ai-assistant/
+│   │   └── ChatInterface.tsx
+│   └── ui/
+│       ├── Button.tsx
+│       ├── Input.tsx
+│       └── Card.tsx
+├── lib/
+│   ├── api.ts
+│   └── auth.ts
+├── styles/
+│   └── globals.css
+├── public/
+│   └── images/
+├── next.config.js
+├── tailwind.config.js
+├── postcss.config.js
+├── tsconfig.json
+└── package.json
