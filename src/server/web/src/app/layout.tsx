@@ -1,15 +1,12 @@
-import { Provider } from 'react-redux';
-import { wrapper } from '../redux/store';
+import { ReduxProvider } from '../redux/provider';
+import "./globals.css";
 
-function RootLayout({ children }: { children: React.ReactNode }) {
-  const { store, props } = wrapper.useWrappedStore({});
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Provider store={store}>{children}</Provider>
+        <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
   );
 }
-
-export default RootLayout;
