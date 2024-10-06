@@ -29,12 +29,10 @@ embeddings = OllamaEmbeddings(base_url=ollama_server)
 ## Redis
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
-print(REDIS_HOST, REDIS_PORT)
 redis_client_token = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
 ## MongoDB
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
-print(MONGO_URI)
 mongo_client = pymongo.MongoClient("mongodb://mongo:27017/")
 
 # FassAPI
@@ -73,4 +71,6 @@ def read_root():
     return {"Hello": "World"}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=HOST, port=8081) # In docker need to change to 0.0.0.0
+    print("Starting FastAPI server...")
+    print(f"API_HOST = {HOST}")
+    uvicorn.run(app, host="0.0.0.0", port=8081) # In docker need to change to 0.0.0.0

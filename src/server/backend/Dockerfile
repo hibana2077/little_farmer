@@ -17,4 +17,6 @@ COPY . /app
 
 EXPOSE 8081
 
+ENV API_HOST=0.0.0.0
+
 CMD ["python3", "main.py"]
