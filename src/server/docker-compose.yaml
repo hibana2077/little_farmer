@@ -53,7 +53,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis-data:/data
+      - ./redis_data:/data
     networks:
       - little_farmer
 
@@ -62,7 +62,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongo-data:/data/db
+      - ./mongo_data:/data/db
     networks:
       - little_farmer
 
