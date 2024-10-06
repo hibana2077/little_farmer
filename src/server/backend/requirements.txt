@@ -21,3 +21,4 @@ redis
 pymongo
 
 python-jose[cryptography]
+passlib

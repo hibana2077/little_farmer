@@ -6,12 +6,23 @@ from bson import ObjectId
 from typing import Optional
 import bcrypt
 from jose import JWTError, jwt
-
-from main import mongo_client, redis_client
 from auth import SECRET_KEY, ALGORITHM, get_current_user, User as AuthUser
+
+# Standard Library
+import os
+import time
+
+# Database
+import redis
+import pymongo
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+
+## MongoDB
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+print(MONGO_URI)
+mongo_client = pymongo.MongoClient("mongodb://mongo:27017/")
 
 # Pydantic models
 class UserCreate(BaseModel):

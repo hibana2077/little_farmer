@@ -7,8 +7,25 @@ from jose import JWTError, jwt
 import os
 from bson import ObjectId
 
-# Assuming these are already initialized in your main.py
-from main import app, mongo_client, redis_client_token
+# Standard Library
+import os
+
+# Database
+import redis
+import pymongo
+
+# Database initialization
+
+## Redis
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+print(REDIS_HOST, REDIS_PORT)
+redis_client_token = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
+
+## MongoDB
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+print(MONGO_URI)
+mongo_client = pymongo.MongoClient("mongodb://mongo:27017/")
 
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
 ALGORITHM = "HS256"

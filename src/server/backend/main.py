@@ -35,7 +35,7 @@ redis_client_token = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 ## MongoDB
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
 print(MONGO_URI)
-mongo_client = pymongo.MongoClient(MONGO_URI)
+mongo_client = pymongo.MongoClient("mongodb://mongo:27017/")
 
 # FassAPI
 app = FastAPI()
