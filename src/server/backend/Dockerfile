@@ -9,7 +9,7 @@ RUN pip3 install -U pip
 
 WORKDIR /app
 
-COPY requirements.txt /app/requirements.txt
+COPY ./requirements.txt /app/requirements.txt
 
 RUN /root/.cargo/bin/uv pip install --system --no-cache -r /app/requirements.txt
 

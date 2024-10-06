@@ -29,10 +29,12 @@ embeddings = OllamaEmbeddings(base_url=ollama_server)
 ## Redis
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+print(REDIS_HOST, REDIS_PORT)
 redis_client_token = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
 ## MongoDB
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+print(MONGO_URI)
 mongo_client = pymongo.MongoClient(MONGO_URI)
 
 # FassAPI
@@ -56,8 +58,9 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     # pull model from ollama
-    _ = requests.post(f"{ollama_server}/api/pull", json={"name": "llama3.2"})
-    _ = requests.post(f"{ollama_server}/api/pull", json={"name": "nomic-embed-text"})
+    # _ = requests.post(f"{ollama_server}/api/pull", json={"name": "llama3.2"})
+    # _ = requests.post(f"{ollama_server}/api/pull", json={"name": "nomic-embed-text"})
+    pass
 
 @app.get("/")
 def read_root():

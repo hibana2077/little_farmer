@@ -13,8 +13,8 @@ services:
 
   backend:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "8081:8081"
     environment:
@@ -23,8 +23,8 @@ services:
       - API_HOST="0.0.0.0"
       - REDIS_HOST="redis"
       - REDIS_PORT="6379"
-      - MONGO_URI="mongodb://mongo:27017"
-      - OLLAMA_SERVER="http://ollama:11434"
+      - MONGO_URI="mongodb://mongo:27017/"
+      - OLLAMA_SERVER="http://ollama:11434/"
     depends_on:
       - redis
       - mongo
