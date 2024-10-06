@@ -11,7 +11,7 @@ WORKDIR /app
 
 COPY requirements.txt /app/requirements.txt
 
-RUN /root/.cargo/bin/uv pip install --system --no-cache -r requirements.txt
+RUN /root/.cargo/bin/uv pip install --system --no-cache -r /app/requirements.txt
 
 COPY . /app
 

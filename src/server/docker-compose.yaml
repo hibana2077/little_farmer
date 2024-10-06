@@ -15,7 +15,6 @@ services:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
-    command: ["python3", "./backend/startup.py"]
     ports:
       - "8081:8081"
     environment:
