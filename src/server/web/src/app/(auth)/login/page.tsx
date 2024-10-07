@@ -2,19 +2,21 @@ import { Metadata } from 'next'
 import LoginForm from './LoginForm'
 
 export const metadata: Metadata = {
-  title: 'Login',
-  description: 'Login to your account',
+  title: '登入',
+  description: '登入您的帳戶',
 }
 
 export default function LoginPage() {
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-        <div className="flex flex-col space-y-2 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
-          <p className="text-sm text-muted-foreground">Enter your credentials to sign in</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-lg">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">歡迎回來</h1>
+            <p className="text-sm text-gray-600">請輸入您的登入資訊</p>
+          </div>
+          <LoginForm />
         </div>
-        <LoginForm />
       </div>
     </div>
   )

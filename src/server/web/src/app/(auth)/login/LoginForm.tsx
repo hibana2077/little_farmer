@@ -29,45 +29,58 @@ export default function LoginForm() {
         localStorage.setItem('user', JSON.stringify(data.user))
         localStorage.setItem('access_token', data.access_token)
         localStorage.setItem('refresh_token', data.refresh_token)
-        router.push('/dashboard') // Redirect to dashboard or home page
+        router.push('/dashboard') // 重定向到儀表板或首頁
       } else {
         const errorData = await response.json()
-        setError(errorData.message || 'Invalid username or password')
+        setError(errorData.message || '用戶名或密碼無效')
       }
     } catch (err) {
-      setError('An error occurred. Please try again.')
+      setError('發生錯誤，請重試。')
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="username">Username</Label>
-        <Input
-          id="username"
-          placeholder="Enter your username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+    <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+      <div className="rounded-md shadow-sm -space-y-px">
+        <div>
+          <Label htmlFor="username" className="sr-only">用戶名</Label>
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            required
+            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+            placeholder="用戶名"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <Label htmlFor="password" className="sr-only">密碼</Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            required
+            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+            placeholder="密碼"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
+
       {error && (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="mt-4">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
-      <Button type="submit" className="w-full">Sign In</Button>
+
+      <div>
+        <Button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+          登入
+        </Button>
+      </div>
     </form>
   )
 }
