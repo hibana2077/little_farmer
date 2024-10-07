@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useAppSelector } from '../redux/hooks';
-import { Button } from '../components/ui/Button';
+import { Button } from '../components/ui/button';
 
 export default function HomeContent() {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
@@ -50,7 +50,7 @@ export default function HomeContent() {
             title='社群論壇'
         //   description="Connect with fellow students and experts to share experiences and get advice."
             description='與其他學生和專家聯繫，分享經驗並獲得建議。'    
-            link="/community"
+        link="/community"
         />
       </div>
     </>

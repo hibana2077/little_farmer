@@ -22,7 +22,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 ## MongoDB
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
 print(MONGO_URI)
-mongo_client = pymongo.MongoClient("mongodb://mongo:27017/")
+mongo_client = pymongo.MongoClient(MONGO_URI)
 
 # Pydantic models
 class UserCreate(BaseModel):
@@ -107,22 +107,26 @@ async def bind_user_to_system(
     else:
         raise HTTPException(status_code=500, detail="Failed to bind user to the system")
 
-@router.post("/users", response_model=UserResponse)
-async def create_user(user: UserCreate, current_admin: AuthUser = Depends(get_current_admin_user)):
+@router.post("/users")
+async def create_user(data: dict):
+    username = data.get("username")
+    password = data.get("password")
+    email = data.get("email")
+    role = data.get("role", "student")
     user_collection = get_user_collection()
     
     # Check if username or email already exists
-    if user_collection.find_one({"$or": [{"username": user.username}, {"email": user.email}]}):
+    if user_collection.find_one({"$or": [{"username": username}, {"email": email}]}):
         raise HTTPException(status_code=400, detail="Username or email already registered")
     
     # Hash the password
-    hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     
     new_user = {
-        "username": user.username,
+        "username": username,
         "password": hashed_password,
-        "email": user.email,
-        "role": user.role,
+        "email": email,
+        "role": role, # student or admin or teacher
         "createdAt": datetime.utcnow(),
         "updatedAt": datetime.utcnow()
     }
@@ -131,13 +135,16 @@ async def create_user(user: UserCreate, current_admin: AuthUser = Depends(get_cu
     created_user = user_collection.find_one({"_id": result.inserted_id})
     return user_helper(created_user)
 
-@router.get("/users/{id}", response_model=UserResponse)
-async def get_user(id: str, current_user: AuthUser = Depends(get_current_user)):
+@router.get("/users/{id}")
+async def get_user(data: dict):
+    id = data.get("query_id")
+    current_role = data.get("current_role")
+    current_id = data.get("current_id")
     user_collection = get_user_collection()
     user = user_collection.find_one({"_id": ObjectId(id)})
     if user:
         # Only allow users to view their own profile or admins to view any profile
-        if str(user["_id"]) == current_user.id or current_user.role == "admin":
+        if str(user["_id"]) == current_id or current_role == "admin":
             return user_helper(user)
         raise HTTPException(status_code=403, detail="Not authorized to view this user")
     raise HTTPException(status_code=404, detail="User not found")

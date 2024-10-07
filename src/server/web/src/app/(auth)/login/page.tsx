@@ -1,18 +1,21 @@
-import LoginForm from './LoginForm';
+import { Metadata } from 'next'
+import LoginForm from './LoginForm'
+
+export const metadata: Metadata = {
+  title: 'Login',
+  description: 'Login to your account',
+}
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-100 to-blue-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center text-green-800 mb-6">Login to Hydroponic Education Platform</h1>
+    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <div className="flex flex-col space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
+          <p className="text-sm text-muted-foreground">Enter your credentials to sign in</p>
+        </div>
         <LoginForm />
-        <p className="mt-4 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
-          <a href="#" className="font-medium text-green-600 hover:text-green-500">
-            Contact your administrator
-          </a>
-        </p>
       </div>
     </div>
-  );
+  )
 }

@@ -25,7 +25,7 @@ redis_client_token = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 ## MongoDB
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
 print(MONGO_URI)
-mongo_client = pymongo.MongoClient("mongodb://mongo:27017/")
+mongo_client = pymongo.MongoClient(MONGO_URI)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
 ALGORITHM = "HS256"
@@ -108,9 +108,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
     return user
 
-@router.post("/auth/login", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
+@router.post("/auth/login")
+async def login_for_access_token(form_data: dict):
+    username = form_data["username"]
+    password = form_data["password"]
+    user = authenticate_user(username, password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -128,16 +130,18 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
                        timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS), 
                        refresh_token)
     
-    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+    return {"user": username, "access_token": access_token, "refresh_token": refresh_token}
 
 @router.post("/auth/logout")
-async def logout(current_user: User = Depends(get_current_user)):
+async def logout(data: dict):
+    username = data["username"]
     # Delete refresh token from Redis
-    redis_client_token.delete(f"refresh_token:{current_user.username}")
+    redis_client_token.delete(f"refresh_token:{username}")
     return {"message": "Successfully logged out"}
 
-@router.post("/auth/refresh-token", response_model=Token)
-async def refresh_token(refresh_token: str):
+@router.post("/auth/refresh-token")
+async def refresh_token(data: dict):
+    refresh_token = data["refresh_token"]
     try:
         payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
