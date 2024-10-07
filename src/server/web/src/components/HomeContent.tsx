@@ -2,18 +2,18 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useAppSelector } from '../redux/hooks';
 import { Button } from '../components/ui/button';
 
 export default function HomeContent() {
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const user = localStorage.getItem('user') ? localStorage.getItem('user')?.slice(1, -1) : null;
 
   return (
     <div className="container mx-auto px-4 py-8">
       {isAuthenticated && user ? (
         <div className="text-center mb-8 bg-white bg-opacity-80 backdrop-blur-md rounded-xl p-6 shadow-lg">
           <p className="text-xl text-gray-700">
-            Welcome back, {user.username}!
+            Welcome back, {user}!
           </p>
           <Link href="/dashboard" passHref>
             <Button className="mt-4">Go to Dashboard</Button>

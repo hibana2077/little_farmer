@@ -26,15 +26,40 @@ export default function LoginForm() {
 
       if (response.ok) {
         const data = await response.json()
-        localStorage.setItem('user', JSON.stringify(data.user))
-        localStorage.setItem('access_token', data.access_token)
-        localStorage.setItem('refresh_token', data.refresh_token)
-        router.push('/dashboard') // 重定向到儀表板或首頁
+        
+        // 使用 try-catch 來確保所有 localStorage 操作都成功執行
+        try {
+          localStorage.setItem('user', JSON.stringify(data.user))
+          localStorage.setItem('access_token', data.access_token)
+          localStorage.setItem('refresh_token', data.refresh_token)
+          localStorage.setItem('isAuthenticated', 'true')
+          
+          console.log('Authentication data saved successfully')
+          console.log('isAuthenticated:', localStorage.getItem('isAuthenticated'))
+          
+          // 可選：驗證所有數據是否正確保存
+          if (
+            localStorage.getItem('user') &&
+            localStorage.getItem('access_token') &&
+            localStorage.getItem('refresh_token') &&
+            localStorage.getItem('isAuthenticated') === 'true'
+          ) {
+            console.log('All authentication data verified')
+            // push to the dashboard page
+            router.push('/dashboard')
+          } else {
+            throw new Error('Failed to save all authentication data')
+          }
+        } catch (storageError) {
+          console.error('Error saving to localStorage:', storageError)
+          setError('登入成功，但保存數據時出錯。請重試。')
+        }
       } else {
         const errorData = await response.json()
         setError(errorData.message || '用戶名或密碼無效')
       }
     } catch (err) {
+      console.error('Login error:', err)
       setError('發生錯誤，請重試。')
     }
   }
