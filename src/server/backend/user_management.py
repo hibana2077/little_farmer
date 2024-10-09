@@ -72,31 +72,31 @@ async def get_current_admin_user(current_user: AuthUser = Depends(get_current_us
 
 # Endpoints
 
-@router.post("/users/bind-system", response_model=dict)
-async def bind_user_to_system(
-    binding: SystemBinding,
-    current_user: AuthUser = Depends(get_current_user)
-):
+@router.post("/users/bind-system")
+async def bind_user_to_system(data:dict):
+    binding_systemId = data.get("systemId")
+    user_id = data.get("userId")
+
     user_systems_collection = mongo_client.get_database("hydroponic_edu").user_systems
     hydroponic_systems_collection = mongo_client.get_database("hydroponic_edu").hydroponic_systems
 
     # Check if the system exists
-    system = hydroponic_systems_collection.find_one({"_id": ObjectId(binding.systemId)})
+    system = hydroponic_systems_collection.find_one({"_id": ObjectId(binding_systemId)})
     if not system:
         raise HTTPException(status_code=404, detail="Hydroponic system not found")
 
     # Check if the user is already bound to this system
     existing_binding = user_systems_collection.find_one({
-        "userId": ObjectId(current_user.id),
-        "systemId": ObjectId(binding.systemId)
+        "userId": ObjectId(user_id),
+        "systemId": ObjectId(binding_systemId)
     })
     if existing_binding:
         raise HTTPException(status_code=400, detail="User is already bound to this system")
 
     # Create new binding
     new_binding = {
-        "userId": ObjectId(current_user.id),
-        "systemId": ObjectId(binding.systemId),
+        "userId": ObjectId(user_id),
+        "systemId": ObjectId(binding_systemId),
         "createdAt": datetime.utcnow(),
         "updatedAt": datetime.utcnow()
     }
