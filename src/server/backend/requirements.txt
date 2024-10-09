@@ -1,22 +1,14 @@
-langchain
-langchainhub
-langchain-community
-langchain-openai
-langchain-groq
-langchain_mistralai
-langchain-chroma
-faiss-cpu
-
+# langchain
+# langchainhub
+# langchain-community
+# langchain-openai
+# langchain-groq
+# langchain_mistralai
+# langchain-chroma
 python-dotenv
 
-transformers
-datasets
-pypdf
-
-translators
-
 fastapi
-
+uvicorn
 redis
 pymongo
 
@@ -24,3 +16,6 @@ python-jose[cryptography]
 passlib
 python-multipart
 pydantic[email]
+
+requests
+bcrypt

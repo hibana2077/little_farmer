@@ -62,7 +62,6 @@ const Navbar = () => {
     { href: '/my-farm', icon: <Sprout className="h-4 w-4" />, text: 'My Farm' },
     { href: '/learning-center', icon: <BookOpen className="h-4 w-4" />, text: 'Learning Center' },
     { href: '/community', icon: <Users className="h-4 w-4" />, text: 'Community' },
-    { href: '/profile', icon: <UserRoundPen className="h-4 w-4" />, text: 'Profile' },
     { href: '/settings', icon: <Cog className="h-4 w-4" />, text: 'Settings' },
   ];
 
@@ -163,8 +162,11 @@ const UserMenu = ({ handleLogout }) => (
         My Account
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>Profile</DropdownMenuItem>
-      <DropdownMenuItem>Settings</DropdownMenuItem>
+      <DropdownMenuItem>
+        <Link href="/settings">
+          Settings
+        </Link>
+      </DropdownMenuItem>
       <DropdownMenuItem onClick={handleLogout}>
         <LogOut className="mr-2 h-4 w-4" />
         <span>Log out</span>

@@ -1,8 +1,8 @@
 # Langchain
-from langchain_community.vectorstores.faiss import FAISS
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_community.embeddings import OllamaEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+# from langchain_community.vectorstores.faiss import FAISS
+# from langchain_community.document_loaders import PyPDFLoader
+# from langchain_community.embeddings import OllamaEmbeddings
+# from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 # Standard Library
 import os
@@ -20,9 +20,9 @@ import redis
 import pymongo
 
 # Ollama
-ollama_server = os.getenv("OLLAMA_SERVER", "http://localhost:11434")
+# ollama_server = os.getenv("OLLAMA_SERVER", "http://localhost:11434")
 HOST = os.getenv("API_HOST", "127.0.0.1")
-embeddings = OllamaEmbeddings(base_url=ollama_server)
+# embeddings = OllamaEmbeddings(base_url=ollama_server)
 
 # Database initialization
 
