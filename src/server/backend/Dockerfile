@@ -5,8 +5,6 @@ RUN apt update && apt install -y python3 python3-pip curl wget iputils-ping
 ADD --chmod=755 https://astral.sh/uv/install.sh /install.sh
 RUN /install.sh && rm /install.sh
 
-RUN pip3 install -U pip
-
 WORKDIR /app
 
 COPY ./requirements.txt /app/requirements.txt
