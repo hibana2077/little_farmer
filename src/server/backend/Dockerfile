@@ -2,6 +2,8 @@ FROM ubuntu:22.04
 
 RUN apt update && apt install -y python3 python3-pip curl wget iputils-ping
 
+RUN pip3 install --upgrade pip
+
 ADD --chmod=755 https://astral.sh/uv/install.sh /install.sh
 RUN /install.sh && rm /install.sh
 
