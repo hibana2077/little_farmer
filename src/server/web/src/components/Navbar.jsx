@@ -50,7 +50,7 @@ const Navbar = () => {
 
   const navItems = [
     { href: '/dashboard', icon: <Home className="h-4 w-4" />, text: 'Dashboard' },
-    { href: '/ai-assistant', icon: <Brain className="h-4 w-4" />, text: 'AI Assistant' },
+    { href: '/ai-chat', icon: <Brain className="h-4 w-4" />, text: 'AI Chat' },
     { href: '/my-farm', icon: <Sprout className="h-4 w-4" />, text: 'My Farm' },
     { href: '/learning-center', icon: <BookOpen className="h-4 w-4" />, text: 'Learning Center' },
     { href: '/community', icon: <Users className="h-4 w-4" />, text: 'Community' },
@@ -58,7 +58,7 @@ const Navbar = () => {
 
   const navItems_fold = [
     { href: '/dashboard', icon: <Home className="h-4 w-4" />, text: 'Dashboard' },
-    { href: '/ai-assistant', icon: <Brain className="h-4 w-4" />, text: 'AI Assistant' },
+    { href: '/ai-chat', icon: <Brain className="h-4 w-4" />, text: 'AI Chat' },
     { href: '/my-farm', icon: <Sprout className="h-4 w-4" />, text: 'My Farm' },
     { href: '/learning-center', icon: <BookOpen className="h-4 w-4" />, text: 'Learning Center' },
     { href: '/community', icon: <Users className="h-4 w-4" />, text: 'Community' },
