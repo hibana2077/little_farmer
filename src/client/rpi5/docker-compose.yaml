@@ -4,3 +4,4 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     command: ["python3", "./app/main.py"]
+    restart: always
