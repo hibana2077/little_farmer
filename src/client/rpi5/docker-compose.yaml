@@ -5,3 +5,6 @@ services:
       dockerfile: ./app/Dockerfile
     command: ["python3", "./app/main.py"]
     restart: always
+    environment:
+      - MASTER_URL=http://master:5000
+      - DEVICE_ID=rpi5
