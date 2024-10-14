@@ -4,7 +4,6 @@ from pydantic import BaseModel
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from jose import JWTError, jwt
-import os
 from bson import ObjectId
 
 # Standard Library
