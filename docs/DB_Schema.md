@@ -16,7 +16,7 @@
 }
 ```
 
-  ### 用戶綁定水耕系統集合 (user_systems)
+### 用戶綁定水耕系統集合 (user_systems)
 
   ```json
   {
