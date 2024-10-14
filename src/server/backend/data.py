@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from jose import JWTError, jwt
+from bson import ObjectId
 
 # Standard Library
 import os
@@ -44,9 +45,9 @@ async def update_data(data: dict):
     # check if systemId exists
     db = mongo_client.hydroponic_edu
     collection = db.sensor_data
-    if collection.find_one({"systemId": systemId}):
+    if collection.find_one({"systemId": ObjectId(systemId)}):
         collection.update_one(
-            {"systemId": systemId},
+            {"systemId": ObjectId(systemId)},
             {
                 "$push": {
                     "readings": {
@@ -66,7 +67,7 @@ async def update_data(data: dict):
         )
     else:
         collection.insert_one({
-            "systemId": systemId,
+            "systemId": ObjectId(systemId),
             "readings": [{
                 "temperature": temperature,
                 "humidity": humidity,
@@ -82,4 +83,37 @@ async def update_data(data: dict):
         })
 
     print("Sensor data Received from DEVICE_ID:", DEVICE_ID, "System ID:", systemId)
+    
     return {"status": "success"}
+
+@router.get("/data/get/dashboard/metrics")
+async def get_dashboard_data(data: dict):
+    systemId = data.get("systemId")
+    db = mongo_client.hydroponic_edu
+    collection = db.sensor_data
+    data = collection.find_one({"systemId": ObjectId(systemId)})
+    latest_reading = data["readings"][-1]
+
+    return latest_reading
+
+@router.get("/data/get/dashboard/history")
+async def get_dashboard_data(data: dict):
+    systemId = data.get("systemId")
+    db = mongo_client.hydroponic_edu
+    collection = db.sensor_data
+    data = collection.find_one({"systemId": ObjectId(systemId)})
+    
+    return_data = []
+
+    for iter, reading in enumerate(data["readings"][::-1]):
+        return_data.append({
+            "timestamp": reading["lastUpdated"],
+            "temperature": reading["temperature"],
+            "ec": reading["ec"],
+            "lightIntensity": reading["lightIntensity"],
+            "dissolvedOxygen": reading["dissolvedOxygen"]
+        })
+
+        if iter == 20:break
+
+    return return_data
