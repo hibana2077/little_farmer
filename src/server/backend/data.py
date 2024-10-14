@@ -18,7 +18,7 @@ import pymongo
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
 print(REDIS_HOST, REDIS_PORT)
-redis_client_token = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
+redis_client_images = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=1) # String data (Base64 encoded images)
 
 ## MongoDB
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
@@ -117,3 +117,21 @@ async def get_dashboard_data(data: dict):
         if iter == 20:break
 
     return return_data
+
+@router.post("/data/image/update")
+async def update_image(data: dict):
+    image_base64 = data.get("image")
+    systemId = data.get("systemId")
+    DEVICE_ID = data.get("DEVICE_ID")
+    lastUpdated = datetime.now()
+
+    redis_client_images.set(systemId, image_base64)
+    print("Image Received from DEVICE_ID:", DEVICE_ID, "System ID:", systemId)
+
+    return {"status": "success"}
+
+@router.get("/data/image/get")
+async def get_image(data: dict):
+    systemId = data.get("systemId")
+    image_base64 = redis_client_images.get(systemId)
+    return {"image": image_base64}
