@@ -134,4 +134,8 @@ async def update_image(data: dict):
 async def get_image(data: dict):
     systemId = data.get("systemId")
     image_base64 = redis_client_images.get(systemId)
+    
+    if image_base64 is None:
+        return {"image": None }
+
     return {"image": image_base64}
