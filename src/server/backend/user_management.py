@@ -127,13 +127,40 @@ async def create_user(data: dict):
         "password": hashed_password,
         "email": email,
         "role": role, # student or admin or teacher
-        "createdAt": datetime.utcnow(),
-        "updatedAt": datetime.utcnow()
     }
     
     result = user_collection.insert_one(new_user)
     created_user = user_collection.find_one({"_id": result.inserted_id})
     return user_helper(created_user)
+
+@router.post("/farms")
+async def create_farm(data: dict):
+    name = data.get("name")
+    location = "TBD"
+    current_status = {
+        "temperature": 0,
+        "humidity": 0,
+        "ph": 0,
+        "ec": 0,
+        "lightIntensity": 0,
+    }
+    plants = []
+    farm_collection = mongo_client.get_database("hydroponic_edu").farms
+    
+    new_farm = {
+        "name": name,
+        "location": location,
+        "currentStatus": current_status,
+        "plants": plants,
+        "createdAt": datetime.now(),
+        "updatedAt": datetime.now()
+    }
+
+    result = farm_collection.insert_one(new_farm)
+    created_farm = farm_collection.find_one({"_id": result.inserted_id})
+    object_id = str(created_farm["_id"])
+    
+    return {"status": "success", "objectId": object_id}
 
 @router.get("/users/{id}")
 async def get_user(data: dict):
