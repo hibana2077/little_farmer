@@ -24,6 +24,13 @@ MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
 print(MONGO_URI)
 mongo_client = pymongo.MongoClient(MONGO_URI)
 
+# JWT settings
+SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
+ALGORITHM = "HS256"
+
+# Custom constants
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin")
+
 # Pydantic models
 class UserCreate(BaseModel):
     username: str
@@ -56,9 +63,7 @@ def user_helper(user) -> dict:
         "id": str(user["_id"]),
         "username": user["username"],
         "email": user["email"],
-        "role": user["role"],
-        "createdAt": user["createdAt"],
-        "updatedAt": user["updatedAt"]
+        "role": user["role"]
     }
 
 # Custom dependencies
@@ -159,7 +164,7 @@ async def create_farm(data: dict):
     result = farm_collection.insert_one(new_farm)
     created_farm = farm_collection.find_one({"_id": result.inserted_id})
     object_id = str(created_farm["_id"])
-    
+
     return {"status": "success", "objectId": object_id}
 
 @router.get("/users/{id}")
@@ -191,7 +196,7 @@ async def update_user(id: str, user_update: UserUpdate, current_user: AuthUser =
     
     # Prepare update data
     update_data = {k: v for k, v in user_update.dict().items() if v is not None}
-    update_data["updatedAt"] = datetime.utcnow()
+    update_data["updatedAt"] = datetime.now()
     
     # Update user
     user_collection.update_one({"_id": ObjectId(id)}, {"$set": update_data})
@@ -216,3 +221,14 @@ async def get_current_user_profile(current_user: AuthUser = Depends(get_current_
     if user:
         return user_helper(user)
     raise HTTPException(status_code=404, detail="User not found")
+
+@router.get("/users")
+async def get_all_users(data: dict):
+    passwd = data.get("password")
+    user_collection = get_user_collection()
+
+    if passwd == ADMIN_PASSWORD:
+        users = user_collection.find()
+        return [user_helper(user) for user in users]
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
