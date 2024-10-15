@@ -8,3 +8,4 @@ services:
     environment:
       - MASTER_URL=http://master:5000
       - DEVICE_ID=rpi5
+      # DEVICE_ID is object_id in the database
