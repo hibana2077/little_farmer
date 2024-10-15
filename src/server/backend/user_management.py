@@ -155,6 +155,7 @@ async def create_farm(data: dict):
     
     new_farm = {
         "name": name,
+        "description": description,
         "location": location,
         "currentStatus": current_status,
         "plants": plants,
@@ -231,5 +232,16 @@ async def get_all_users(data: dict):
     if passwd == ADMIN_PASSWORD:
         users = user_collection.find()
         return [user_helper(user) for user in users]
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+@router.get("/farms")
+async def get_all_farms(data: dict):
+    passwd = data.get("password")
+    farm_collection = mongo_client.get_database("hydroponic_edu").farms
+
+    if passwd == ADMIN_PASSWORD:
+        farms = farm_collection.find()
+        return [farm for farm in farms]
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")

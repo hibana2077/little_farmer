@@ -44,8 +44,24 @@ def create_users():
 def manage_facilities():
     st.write("Manage facilities")
 
+    facilities = api_get_all_systems()
+    facilities_df = pd.DataFrame(facilities)
+    st.dataframe(facilities_df)
+
 def create_facilities():
     st.write("Create facilities")
+
+    with st.form("create_facility_form"):
+        name = st.text_input("Name")
+        description = st.text_area("Description")
+
+        if st.form_submit_button("Create Facility"):
+            response = api_create_system(name, description)
+            if response.get("error"):
+                st.error(response["error"])
+            else:
+                st.success(f"Facility {name} created successfully with ID {response['objectId']}")
+            st.rerun()
 
 # Login
 if not st.session_state.login:
