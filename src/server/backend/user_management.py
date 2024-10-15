@@ -141,6 +141,7 @@ async def create_user(data: dict):
 @router.post("/farms")
 async def create_farm(data: dict):
     name = data.get("name")
+    description = data.get("description")
     location = "TBD"
     current_status = {
         "temperature": 0,
