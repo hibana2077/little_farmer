@@ -63,6 +63,29 @@ def create_facilities():
                 st.success(f"Facility {name} created successfully with ID {response['objectId']}")
             st.rerun()
 
+def user_bind_facility():
+    st.write("Bind user to facility")
+
+    users = api_get_all_users()
+    users_df = pd.DataFrame(users)
+    st.dataframe(users_df)
+
+    facilities = api_get_all_systems()
+    facilities_df = pd.DataFrame(facilities)
+    st.dataframe(facilities_df)
+
+    with st.form("bind_user_facility_form"):
+        user_id = st.selectbox("User ID", users_df["id"])
+        facility_id = st.selectbox("Facility ID", facilities_df["id"])
+
+        if st.form_submit_button("Bind User to Facility"):
+            response = api_bind_user_to_system(user_id, facility_id)
+            if response.get("error"):
+                st.error(response["error"])
+            else:
+                st.success("User bound to facility successfully")
+            st.rerun()
+
 # Login
 if not st.session_state.login:
     username = st.text_input("Username")

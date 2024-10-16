@@ -66,6 +66,13 @@ def user_helper(user) -> dict:
         "role": user["role"]
     }
 
+def system_helper(system) -> dict:
+    return {
+        "id": str(system["_id"]),
+        "name": system["name"],
+        "description": system["description"]
+    }
+
 # Custom dependencies
 async def get_current_admin_user(current_user: AuthUser = Depends(get_current_user)):
     if current_user.role != "admin":
@@ -242,6 +249,6 @@ async def get_all_farms(data: dict):
 
     if passwd == ADMIN_PASSWORD:
         farms = farm_collection.find()
-        return [farm for farm in farms]
+        return [system_helper(farm) for farm in farms]
     else:
         raise HTTPException(status_code=401, detail="Unauthorized")

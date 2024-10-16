@@ -20,3 +20,7 @@ def api_get_all_systems():
 def api_create_system(name, description):
     response = requests.post(f"{HOST}/farms", json={"name": name, "description": description})
     return response.json()
+
+def api_bind_user_to_system(user_id, system_id):
+    response = requests.post(f"{HOST}/users/bind-system", json={"userId": user_id, "systemId": system_id})
+    return response.json()
