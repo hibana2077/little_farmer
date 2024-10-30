@@ -14,6 +14,6 @@ RUN uv pip install --system --no-cache-dir -r /app/requirements.txt
 
 COPY . /app
 
-EXPOSE 3000
+EXPOSE 8000
 
-CMD ["streamlit", "run", "main.py", "--server.port", "3000", "--server.enableCORS", "true"]
+CMD ["streamlit", "run", "main.py", "--server.port", "8000", "--server.enableCORS", "true"]

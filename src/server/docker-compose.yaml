@@ -16,7 +16,7 @@ services:
       context: ./admin_panel
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "8000:8000"
     environment:
       - API_URL=http://backend:8081
       - ADMIN_PASSWORD=admin
