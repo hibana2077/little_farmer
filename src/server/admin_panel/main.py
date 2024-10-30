@@ -105,12 +105,12 @@ else:
     pages = st.navigation(
         {
             "Manage Users": [
-                st.Page("Manage Users", manage_users),
-                st.Page("Create Users", create_users),
+                st.Page(title="Manage Users", page=manage_users),
+                st.Page(title="Create Users", page=create_users),
             ],
             "Manage Facilities": [
-                st.Page("Manage Facilities", manage_facilities),
-                st.Page("Create Facilities", create_facilities),
+                st.Page(title="Manage Facilities", page=manage_facilities),
+                st.Page(title="Create Facilities", page=create_facilities),
             ]
         }
     )
