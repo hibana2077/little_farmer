@@ -111,7 +111,10 @@ else:
             "Manage Facilities": [
                 st.Page(title="Manage Facilities", page=manage_facilities),
                 st.Page(title="Create Facilities", page=create_facilities),
-            ]
+            ],
+            "Bind User to Facility": [
+                st.Page(title="Bind User to Facility", page=user_bind_facility),
+            ],
         }
     )
     pages.run()
