@@ -1,5 +1,43 @@
 # 進度報告
 
+## 系統架構
+
+### 技術堆疊 (Tech Stacks)
+
+#### 前端技術
+
+- **Framework**: React + TypeScript
+- **CSS Framework**: Tailwind CSS
+- **Rendering**: Server-Side Rendering (SSR)
+- **State Management**: Redux Toolkit
+- **API Client**: Axios
+- **UI Components**: shadcn/ui
+
+#### 後端技術
+
+- **Framework**: FastAPI
+- **Authentication**: JWT + OAuth2
+- **API Documentation**: Swagger/OpenAPI
+- **WebSocket**: FastAPI WebSocket
+
+#### 資料庫
+
+- **主要資料庫**: MongoDB
+  - 使用者資料
+  - 農場資訊
+  - 作物紀錄
+- **快取系統**: Redis
+  - Session 管理
+  - API 快取
+  - 即時訊息
+
+#### AI 部署
+
+- **推理引擎**: Ollama
+- **模型格式**: GGUF
+- **部署方式**: Docker Container
+- **負載平衡**: Nginx
+
 ## 網頁
 
 ### 進度
